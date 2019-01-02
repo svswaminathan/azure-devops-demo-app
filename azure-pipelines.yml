@@ -23,5 +23,5 @@ steps:
 - task: AzureRmWebAppDeployment@3
   inputs:
     azureSubscription: 'azure-devops-demo-conn'
-    WebAppName: 'bdotnet-azuredevopsdemo.azurewebsites.net'
+    WebAppName: 'bdotnet-azuredevopsdemo'
     Package: $(System.ArtifactsDirectory)/**/*.zip
