@@ -5,26 +5,38 @@
 
 trigger:
 - master
+- feature/*
 
-pool:
-  vmImage: 'Ubuntu-16.04'
+# pool:
+#   vmImage: 'Ubuntu-16.04'
 
 variables:
   buildConfiguration: 'Release'
 
-steps:
-- script: |
+jobs:
+- job: Windows
+  pool:
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - script: |
       dotnet build --configuration $(buildConfiguration)
       
-- task: DotNetCoreCLI@2
-  inputs:
-    command: publish
-    publishWebProjects: True
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: True
+  # - task: DotNetCoreCLI@2
+  #   inputs:
+  #     command: publish
+  #     publishWebProjects: True
+  #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+  #     zipAfterPublish: True
 
-- task: AzureRmWebAppDeployment@3
-  inputs:
-    azureSubscription: 'azure-devops-demo-conn'
-    WebAppName: 'bdotnet-azuredevopsdemo'
-    Package: $(System.ArtifactsDirectory)/**/*.zip
+- job: Linux
+  pool:
+    vmImage: 'Ubuntu-16.04'
+  steps:
+  - script: |
+      dotnet build --configuration $(buildConfiguration)
+
+# - task: AzureRmWebAppDeployment@3
+#   inputs:
+#     azureSubscription: 'azure-devops-demo-conn'
+#     WebAppName: 'bdotnet-azuredevopsdemo'
+#     Package: $(System.ArtifactsDirectory)/**/*.zip
